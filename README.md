@@ -16,6 +16,7 @@ A lightweight in-game overlay for **Valorant** that automatically starts a **45-
 
 - **Overwolf SDK** – Access real-time Valorant events safely
 - **React** – Component-based UI
+- **Electron JS** - Improved event handling
 - **HTML/CSS/JS** – Overlay layout and styling
 
 ## 📁 Project Structure
