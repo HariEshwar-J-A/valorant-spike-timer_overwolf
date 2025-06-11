@@ -1,0 +1,136 @@
+{
+  "manifest_version": 1,
+  "type": "WebApp",
+  "meta": {
+    "name": "Valorant Spike Timer",
+    "description": "Automatic spike timer overlay for Valorant",
+    "author": "Valorant Timer Team",
+    "version": "1.0.0",
+    "minimum-overwolf-version": "0.193.0.0",
+    "access-name": "Valorant Spike Timer",
+    "icon": "icon.png",
+    "icon_gray": "icon_gray.png",
+    "launcher_icon": "launcher_icon.ico"
+  },
+  "permissions": [
+    "Extensions",
+    "Hotkeys",
+    "GameInfo",
+    "GameControl"
+  ],
+  "channel-id": 0,
+  "dependencies": null,
+  "data": {
+    "start_window": {
+      "file": "index.html",
+      "show_in_taskbar": false,
+      "transparent": true,
+      "resizable": false,
+      "show_minimize": false,
+      "clickthrough": false,
+      "disable_rightclick": false,
+      "forcecapture": false,
+      "show_only_on_stream": false,
+      "ignore_keyboard_events": false,
+      "in_game_only": true,
+      "desktop_only": false,
+      "disable_restore_animation": false,
+      "grab_keyboard_focus": false,
+      "size": {
+        "width": 400,
+        "height": 200
+      },
+      "start_position": {
+        "top": 100,
+        "left": 100
+      },
+      "topmost": true
+    },
+    "windows": {
+      "overlay": {
+        "file": "index.html",
+        "show_in_taskbar": false,
+        "transparent": true,
+        "override_on_update": false,
+        "size": {
+          "width": 400,
+          "height": 200
+        },
+        "start_position": {
+          "top": 100,
+          "left": 100
+        },
+        "topmost": true,
+        "grab_keyboard_focus": false,
+        "focusable": false,
+        "resizable": false,
+        "show_minimize": false,
+        "clickthrough": false,
+        "disable_rightclick": false,
+        "in_game_only": true,
+        "desktop_only": false
+      },
+      "settings": {
+        "file": "settings.html",
+        "show_in_taskbar": true,
+        "transparent": false,
+        "override_on_update": false,
+        "size": {
+          "width": 600,
+          "height": 400
+        },
+        "start_position": {
+          "top": 200,
+          "left": 200
+        },
+        "topmost": false,
+        "grab_keyboard_focus": true,
+        "focusable": true,
+        "resizable": true,
+        "show_minimize": true,
+        "clickthrough": false,
+        "desktop_only": false,
+        "in_game_only": false
+      }
+    },
+    "hotkeys": {
+      "toggle_settings": {
+        "title": "Toggle Settings",
+        "action-type": "custom",
+        "default": "Ctrl+Shift+S"
+      },
+      "toggle_overlay": {
+        "title": "Toggle Overlay",
+        "action-type": "custom", 
+        "default": "Ctrl+Shift+O"
+      }
+    },
+    "game_events": [
+      {
+        "id": 21640,
+        "title": "Valorant",
+        "type": "launcher",
+        "type_id": 0,
+        "path": "VALORANT.exe",
+        "class_name": "VALORANT  ",
+        "events": [
+          "bomb_planted",
+          "bomb_defused",
+          "round_start",
+          "round_end",
+          "match_start",
+          "match_end"
+        ]
+      }
+    ],
+    "launch_events": [
+      {
+        "event": "GameLaunch",
+        "event_data": {
+          "game_ids": [21640]
+        },
+        "start_minimized": true
+      }
+    ]
+  }
+}
