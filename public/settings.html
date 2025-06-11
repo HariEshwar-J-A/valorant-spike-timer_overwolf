@@ -18,10 +18,32 @@
         margin: 0 auto;
       }
       
+      .settings-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+      }
+      
       h1 {
         color: #ff4655;
-        text-align: center;
-        margin-bottom: 30px;
+        margin: 0;
+      }
+      
+      .close-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+        color: white;
+        padding: 8px 12px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      
+      .close-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.4);
       }
       
       h2 {
@@ -82,14 +104,6 @@
   </head>
   <body>
     <div id="settings-root"></div>
-    <script type="module">
-      import React from 'react';
-      import ReactDOM from 'react-dom/client';
-      import Settings from '../src/components/Settings.jsx';
-      
-      ReactDOM.createRoot(document.getElementById('settings-root')).render(
-        React.createElement(Settings)
-      );
-    </script>
+    <script type="module" src="/src/settingsMain.jsx"></script>
   </body>
 </html>

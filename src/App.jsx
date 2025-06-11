@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-
-const { ipcRenderer } = window.require ? window.require('electron') : {};
+import overwolfService from './services/overwolfService';
 
 function App() {
   const [timeLeft, setTimeLeft] = useState(0);
@@ -12,37 +11,38 @@ function App() {
   const [isDemoMode, setIsDemoMode] = useState(false);
   
   const intervalRef = useRef(null);
-  const audioRef = useRef(null);
 
   useEffect(() => {
-    // Check if we're in Electron environment
-    if (ipcRenderer) {
+    // Initialize Overwolf service
+    const initializeApp = async () => {
+      const isOverwolfAvailable = await overwolfService.initialize();
+      
+      if (!isOverwolfAvailable) {
+        setIsDemoMode(true);
+        console.log('Running in demo mode (no Overwolf)');
+      }
+
       // Load settings
-      ipcRenderer.invoke('get-settings').then(loadedSettings => {
-        setSettings(loadedSettings);
-      });
+      const loadedSettings = overwolfService.getSettings();
+      setSettings(loadedSettings);
 
-      // Listen for timer events from main process
-      ipcRenderer.on('start-timer', (event, duration) => {
-        console.log('Received start-timer event with duration:', duration);
-        startTimer(duration || settings.timerDuration);
-      });
+      // Setup event listeners
+      overwolfService.addEventListener('spike-planted', handleSpikePlanted);
+      overwolfService.addEventListener('spike-defused', handleSpikeDefused);
+      overwolfService.addEventListener('round-end', handleRoundEnd);
+      overwolfService.addEventListener('round-start', handleRoundStart);
+    };
 
-      ipcRenderer.on('stop-timer', () => {
-        console.log('Received stop-timer event');
-        stopTimer();
-      });
+    initializeApp();
 
-      return () => {
-        ipcRenderer.removeAllListeners('start-timer');
-        ipcRenderer.removeAllListeners('stop-timer');
-      };
-    } else {
-      // Demo mode for web browser
-      setIsDemoMode(true);
-      console.log('Running in demo mode (no Electron)');
-    }
-  }, [settings.timerDuration]);
+    // Cleanup event listeners
+    return () => {
+      overwolfService.removeEventListener('spike-planted', handleSpikePlanted);
+      overwolfService.removeEventListener('spike-defused', handleSpikeDefused);
+      overwolfService.removeEventListener('round-end', handleRoundEnd);
+      overwolfService.removeEventListener('round-start', handleRoundStart);
+    };
+  }, []);
 
   useEffect(() => {
     if (isActive && timeLeft > 0) {
@@ -72,6 +72,26 @@ function App() {
     return () => clearInterval(intervalRef.current);
   }, [isActive, timeLeft, settings.soundEnabled]);
 
+  const handleSpikePlanted = (data) => {
+    console.log('Spike planted event received:', data);
+    startTimer(data?.duration || settings.timerDuration);
+  };
+
+  const handleSpikeDefused = () => {
+    console.log('Spike defused event received');
+    stopTimer();
+  };
+
+  const handleRoundEnd = () => {
+    console.log('Round end event received');
+    stopTimer();
+  };
+
+  const handleRoundStart = () => {
+    console.log('Round start event received');
+    stopTimer();
+  };
+
   const startTimer = (duration = settings.timerDuration) => {
     console.log('Starting timer with duration:', duration);
     setTimeLeft(duration);
@@ -85,18 +105,19 @@ function App() {
     clearInterval(intervalRef.current);
   };
 
-  const hideOverlay = () => {
-    if (ipcRenderer) {
-      ipcRenderer.invoke('hide-overlay');
+  const hideOverlay = async () => {
+    try {
+      await overwolfService.hideCurrentWindow();
+    } catch (error) {
+      console.error('Failed to hide overlay:', error);
     }
   };
 
   const simulateSpikePlant = () => {
-    if (ipcRenderer) {
-      ipcRenderer.invoke('simulate-spike-plant');
-    } else {
-      // Demo mode
+    if (isDemoMode) {
       startTimer(45);
+    } else {
+      overwolfService.simulateSpikePlant();
     }
   };
 

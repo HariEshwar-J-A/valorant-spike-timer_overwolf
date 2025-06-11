@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
-const { ipcRenderer } = window.require ? window.require('electron') : {};
+import overwolfService from '../services/overwolfService';
 
 function Settings() {
   const [settings, setSettings] = useState({
@@ -11,30 +10,15 @@ function Settings() {
   });
 
   useEffect(() => {
-    if (ipcRenderer) {
-      // Listen for settings load event
-      ipcRenderer.on('load-settings', (event, loadedSettings) => {
-        setSettings(loadedSettings);
-      });
-
-      // Load initial settings
-      ipcRenderer.invoke('get-settings').then(loadedSettings => {
-        setSettings(loadedSettings);
-      });
-
-      return () => {
-        ipcRenderer.removeAllListeners('load-settings');
-      };
-    }
+    // Load initial settings
+    const loadedSettings = overwolfService.getSettings();
+    setSettings(loadedSettings);
   }, []);
 
   const handleSettingChange = (key, value) => {
     const newSettings = { ...settings, [key]: value };
     setSettings(newSettings);
-    
-    if (ipcRenderer) {
-      ipcRenderer.invoke('save-settings', newSettings);
-    }
+    overwolfService.saveSettings(newSettings);
   };
 
   const handlePositionChange = (axis, value) => {
@@ -47,9 +31,20 @@ function Settings() {
     handleSettingChange('overlaySize', newSize);
   };
 
+  const closeSettings = async () => {
+    try {
+      await overwolfService.closeWindow('settings');
+    } catch (error) {
+      console.error('Failed to close settings:', error);
+    }
+  };
+
   return (
     <div className="settings-container">
-      <h1>Valorant Spike Timer Settings</h1>
+      <div className="settings-header">
+        <h1>Valorant Spike Timer Settings</h1>
+        <button className="close-btn" onClick={closeSettings}>×</button>
+      </div>
       
       <div className="settings-section">
         <h2>Timer Settings</h2>
@@ -140,8 +135,8 @@ function Settings() {
       <div className="settings-section">
         <h2>About</h2>
         <p>Valorant Spike Timer v1.0.0</p>
-        <p>Built with ow-electron and React</p>
-        <p>Riot Games compliant overlay using Overwolf SDK</p>
+        <p>Built with Overwolf SDK and React</p>
+        <p>Riot Games compliant overlay using official Overwolf APIs</p>
       </div>
     </div>
   );

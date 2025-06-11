@@ -16,14 +16,7 @@
     "Extensions",
     "Hotkeys",
     "GameInfo",
-    "GameControl",
-    "FileSystem",
-    "LogitechLed",
-    "LogitechArx",
-    "VideoCaptureSettings",
-    "DesktopStreaming",
-    "Streaming",
-    "Profile"
+    "GameControl"
   ],
   "channel-id": 0,
   "dependencies": null,

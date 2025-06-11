@@ -1,50 +1,23 @@
 {
   "name": "valorant-spike-timer",
   "version": "1.0.0",
-  "description": "Valorant spike timer overlay using ow-electron and React",
-  "main": "public/main.js",
+  "description": "Valorant spike timer overlay using Overwolf SDK and React",
+  "main": "index.html",
   "homepage": "./",
   "scripts": {
-    "dev": "concurrently \"npm run electron:dev\" \"npm run react:dev\"",
-    "react:dev": "vite",
-    "react:build": "vite build",
-    "electron:dev": "wait-on http://localhost:5173 && electron public/main.js --dev",
-    "electron:pack": "electron-builder",
-    "build": "npm run react:build && npm run electron:pack",
+    "dev": "vite",
+    "build": "vite build",
     "preview": "vite preview",
     "overwolf:package": "node scripts/package-overwolf.js"
   },
   "dependencies": {
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "electron": "^28.0.0",
-    "ow-electron": "^1.0.0"
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
-    "concurrently": "^8.2.2",
-    "electron-builder": "^24.9.1",
-    "vite": "^5.4.10",
-    "wait-on": "^8.0.0"
-  },
-  "build": {
-    "appId": "com.valorant.spiketimer",
-    "productName": "Valorant Spike Timer",
-    "directories": {
-      "output": "dist-electron"
-    },
-    "files": [
-      "dist/**/*",
-      "public/main.js",
-      "public/manifest.json"
-    ],
-    "extraFiles": [
-      {
-        "from": "public/manifest.json",
-        "to": "manifest.json"
-      }
-    ]
+    "vite": "^5.4.10"
   }
 }

@@ -7,23 +7,19 @@ console.log('📦 Packaging Valorant Spike Timer for Overwolf...');
 // Ensure dist directory exists
 if (!fs.existsSync('dist')) {
   console.log('🔨 Building React app...');
-  execSync('npm run react:build', { stdio: 'inherit' });
+  execSync('npm run build', { stdio: 'inherit' });
 }
 
 // Copy manifest.json to dist
 console.log('📋 Copying manifest.json...');
 fs.copyFileSync('public/manifest.json', 'dist/manifest.json');
 
-// Copy main.js to dist
-console.log('⚡ Copying main.js...');
-fs.copyFileSync('public/main.js', 'dist/main.js');
-
 // Create package info
 const packageInfo = {
   name: 'valorant-spike-timer',
   version: '1.0.0',
-  description: 'Valorant spike timer overlay using ow-electron and React',
-  main: 'main.js',
+  description: 'Valorant spike timer overlay using Overwolf SDK and React',
+  main: 'index.html',
   overwolf: {
     manifest: 'manifest.json'
   }

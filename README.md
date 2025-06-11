@@ -1,13 +1,12 @@
 # 🕒 Valorant Spike Timer Overlay
 
-A lightweight in-game overlay for **Valorant** that automatically starts a **45-second countdown** whenever the **spike is planted**. This tool is built using **React**, **Electron**, and the **Overwolf SDK**, which safely hooks into Valorant's in-game events without violating Riot's policies.
+A lightweight in-game overlay for **Valorant** that automatically starts a **45-second countdown** whenever the **spike is planted**. This tool is built using **React** and the **Overwolf SDK**, which safely hooks into Valorant's in-game events without violating Riot's policies.
 
 ## 🚀 Features
 
 - ⏱️ **Automatic spike timer** triggered by the `bomb_planted` game event
 - 🎮 **In-game transparent overlay** for minimal distraction
 - ⚛️ **Built with React** for a fast and dynamic UI
-- ⚡ **Electron integration** with ow-electron for improved event handling
 - 🔐 **Riot-safe** using Overwolf's approved SDK
 - 🔧 **Customizable settings** with hotkey support
 - 🔊 **Optional sound alerts** at 10 seconds remaining
@@ -17,9 +16,7 @@ A lightweight in-game overlay for **Valorant** that automatically starts a **45-
 ## 🛠️ Tech Stack
 
 - **Overwolf SDK** – Access real-time Valorant events safely
-- **Electron JS** - Improved event handling and window management
 - **React** – Component-based UI with Vite
-- **ow-electron** – Bridge between Overwolf and Electron
 - **HTML/CSS/JS** – Overlay layout and styling
 
 ## 📁 Project Structure
@@ -28,13 +25,15 @@ A lightweight in-game overlay for **Valorant** that automatically starts a **45-
 valorant_spike_timer/
 ├── public/
 │   ├── manifest.json       # Overwolf app configuration
-│   ├── main.js             # Electron main process
 │   └── settings.html       # Settings window HTML
 ├── src/
 │   ├── components/
 │   │   └── Settings.jsx    # Settings component
+│   ├── services/
+│   │   └── overwolfService.js # Overwolf SDK integration
 │   ├── App.jsx             # Main timer overlay component
 │   ├── main.jsx            # React entry point
+│   ├── settingsMain.jsx    # Settings window entry point
 │   └── index.css           # Overlay styles
 ├── scripts/
 │   └── package-overwolf.js # Overwolf packaging script
@@ -43,7 +42,7 @@ valorant_spike_timer/
 └── README.md
 ```
 
-## 🚀 Development Setup (Bolt.new Environment)
+## 🚀 Development Setup
 
 ### Prerequisites
 - Node.js 18+ installed
@@ -61,28 +60,22 @@ npm install
 npm run dev
 ```
 
-This will:
-- Start the React development server on `http://localhost:5173`
-- Launch Electron with hot reload
-- Show demo controls for testing without Valorant
+This will start the React development server on `http://localhost:5173` with hot reload enabled.
 
 3. **Development features:**
 - **Demo mode**: Test timer functionality without Valorant running
 - **Hot reload**: Changes reflect immediately
-- **DevTools**: Electron DevTools available for debugging
+- **Browser testing**: Test in regular browser before Overwolf deployment
 
 ### Development Workflow
 
 1. **React Development:**
    - Edit components in `src/`
-   - Changes auto-reload in Electron window
+   - Changes auto-reload in browser
    - Use demo controls to test timer functionality
 
-2. **Electron Main Process:**
-   - Edit `public/main.js` for window management and IPC
-   - Restart dev server to see changes
-
-3. **Overwolf Integration:**
+2. **Overwolf Integration:**
+   - Edit `src/services/overwolfService.js` for game event handling
    - Edit `public/manifest.json` for game events and permissions
    - Test with actual Overwolf client for production validation
 
@@ -90,16 +83,12 @@ This will:
 
 ### Development
 ```bash
-npm run dev              # Start development with hot reload
-npm run react:dev        # Start only React dev server
-npm run electron:dev     # Start only Electron (requires React server)
+npm run dev              # Start development server with hot reload
 ```
 
 ### Production Build
 ```bash
-npm run build           # Build React app and package Electron
-npm run react:build     # Build only React app
-npm run electron:pack   # Package Electron app
+npm run build           # Build React app for production
 ```
 
 ### Overwolf Packaging
@@ -121,7 +110,6 @@ npm run overwolf:package
 
 This creates a complete Overwolf package in the `dist/` directory with:
 - Built React application
-- Electron main process
 - Overwolf manifest
 - All required assets
 
@@ -205,17 +193,12 @@ This tool provides timing information that is already visible in-game. It does n
    - Try toggling overlay with Ctrl+Shift+O
 
 3. **Settings not saving:**
-   - Check file permissions
+   - Check Overwolf permissions
    - Restart the application
    - Reset to defaults in settings panel
 
 ### Debug Mode
-Run with debug logging:
-```bash
-npm run electron:dev
-```
-
-Check console for event detection and error messages.
+Run with debug logging in browser console to check for event detection and error messages.
 
 ## 🤝 Contributing
 
@@ -233,7 +216,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 - **Riot Games** for Valorant
 - **Overwolf** for the game integration SDK
-- **Electron** and **React** communities
+- **React** and **Vite** communities
 - **Valorant community** for feedback and testing
 
 ---
